@@ -203,7 +203,7 @@ img {
 .contact-info h2{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:1rem;color:#0d0d12}
 .contact-info p{color:var(--muted);line-height:1.75;margin-bottom:1.5rem}
 .contact-links{display:flex;flex-direction:column;gap:0.75rem}
-.clink{display:flex;align-items:center;gap:0.85rem;color:var(--muted);text-decoration:none;font-size:0.88rem;transition:color 0.2s}
+.clink{position: relative;display:flex;align-items:center;gap:0.85rem;color:var(--muted);text-decoration:none;font-size:0.88rem;transition:color 0.2s}
 .clink:hover{color:var(--accent)}
 .clink-icon{width:38px;height:38px;min-width:38px;border-radius:10px;background:rgba(255,255,255,0.8);border:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;font-size:1rem}
 .copy-icon,
@@ -223,8 +223,8 @@ img {
 /* ── Tooltip (hover) ── */
 .tooltip {
   position: absolute;
-  right: 35px;
-  top: -28px;
+  right: 0px;
+  top: -20px;
   background: #0d0d12;
   color: #fff;
   font-size: 0.7rem;
@@ -243,27 +243,7 @@ img {
   transform: translateY(0);
 }
 
-/* ── Copied badge ── */
-.copied-badge {
-  position: absolute;
-  right: 35px;
-  top: -28px;
-  background: #1d9e75;
-  color: #fff;
-  font-size: 0.7rem;
-  padding: 4px 8px;
-  border-radius: 6px;
-  opacity: 0;
-  transform: translateY(5px);
-  transition: all 0.2s ease;
-  pointer-events: none;
-}
 
-/* active state */
-.copied-badge.show {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 /* ── FOOTER ── */
 footer{
@@ -542,8 +522,6 @@ footer span{color:var(--accent);font-weight:600}
             <!-- Tooltip -->
             <span class="tooltip">Click to copy</span>
 
-            <!-- Copied badge -->
-            <span class="copied-badge">Copied ✓</span>
           </a>
           <a href="https://linkedin.com/in/isha-kale-399225349" class="clink" target="_blank" rel="noopener">
             <div class="clink-icon"><i class="fa-brands fa-linkedin"></i></div>
@@ -646,28 +624,38 @@ footer span{color:var(--accent);font-weight:600}
 
         document.body.appendChild(overlay);
     });
-    //copy email to clipboard
-   const emailLink = document.getElementById("copyEmail");
-const copyIcon = emailLink.querySelector(".copy-icon");
+  //copy email to clipboard
+  const emailLink = document.getElementById("copyEmail");
+  const copyIcon = emailLink.querySelector(".copy-icon");
+  //const badge = emailLink.querySelector(".copied-badge");
+  const tooltip = emailLink.querySelector(".tooltip");
 
-emailLink.addEventListener("click", function (e) {
-  e.preventDefault();
+  emailLink.addEventListener("click", function (e) {
+    e.preventDefault();
 
-  const email = "ishakale07@gmail.com";
+    const email = "ishakale07@gmail.com";
 
-  navigator.clipboard.writeText(email).then(() => {
+    navigator.clipboard.writeText(email).then(() => {
 
-    // change ONLY copy icon
-    copyIcon.classList.remove("fa-copy", "fa-regular");
-    copyIcon.classList.add("fa-check", "fa-solid");
+      // change icon
+      copyIcon.classList.remove("fa-copy", "fa-regular");
+      copyIcon.classList.add("fa-check", "fa-solid");
 
-    setTimeout(() => {
-      copyIcon.classList.remove("fa-check", "fa-solid");
-      copyIcon.classList.add("fa-copy", "fa-regular");
-    }, 2000);
+      // hide tooltip, show badge
+      //tooltip.style.opacity = "0";
+      //badge.classList.add("show");
 
+      setTimeout(() => {
+        // revert icon
+        copyIcon.classList.remove("fa-check", "fa-solid");
+        copyIcon.classList.add("fa-copy", "fa-regular");
+
+        // hide badge
+        //badge.classList.remove("show");
+      }, 2000);
+
+    });
   });
-});
   });
 </script>
 
