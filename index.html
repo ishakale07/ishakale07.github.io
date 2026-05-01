@@ -206,6 +206,11 @@ img {
 .clink{display:flex;align-items:center;gap:0.85rem;color:var(--muted);text-decoration:none;font-size:0.88rem;transition:color 0.2s}
 .clink:hover{color:var(--accent)}
 .clink-icon{width:38px;height:38px;min-width:38px;border-radius:10px;background:rgba(255,255,255,0.8);border:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;font-size:1rem}
+.copy-icon,
+.external-icon {
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
 .contact-form{background:rgba(255,255,255,0.75);border:1px solid rgba(0,0,0,0.07);border-radius:20px;padding:2rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .form-group{margin-bottom:1.25rem}
 .form-group label{display:block;font-size:0.77rem;color:var(--muted);margin-bottom:0.4rem;letter-spacing:0.04em;font-weight:500}
@@ -214,6 +219,51 @@ img {
 .form-group textarea{resize:vertical;min-height:110px}
 .form-submit{width:100%;background:#0d0d12;color:#fff;border:none;padding:0.9rem;border-radius:100px;font-family:inherit;font-size:0.95rem;font-weight:500;cursor:pointer;transition:opacity 0.2s,transform 0.15s}
 .form-submit:hover{opacity:0.85;transform:translateY(-1px)}
+
+/* ── Tooltip (hover) ── */
+.tooltip {
+  position: absolute;
+  right: 35px;
+  top: -28px;
+  background: #0d0d12;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* show on hover */
+.clink:hover .tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Copied badge ── */
+.copied-badge {
+  position: absolute;
+  right: 35px;
+  top: -28px;
+  background: #1d9e75;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+/* active state */
+.copied-badge.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* ── FOOTER ── */
 footer{
@@ -480,17 +530,30 @@ footer span{color:var(--accent);font-weight:600}
         <h2>Let's Build Something Together</h2>
         <p>Open to full-time roles, freelance collaborations, and research partnerships. Drop me a message and I'll get back within 24 hours.</p>
         <div class="contact-links">
-          <a href="mailto:ishakale07@gmail.com" class="clink">
-            <div class="clink-icon"><i class="fa-solid fa-envelope"></i></div>
-            ishakale07@gmail.com
+          <a href="#" class="clink" id="copyEmail">
+            <div class="clink-icon">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+
+            <span class="email-text">ishakale07@gmail.com</span>
+
+            <i class="fa-regular fa-copy copy-icon"></i>
+
+            <!-- Tooltip -->
+            <span class="tooltip">Click to copy</span>
+
+            <!-- Copied badge -->
+            <span class="copied-badge">Copied ✓</span>
           </a>
           <a href="https://linkedin.com/in/isha-kale-399225349" class="clink" target="_blank" rel="noopener">
             <div class="clink-icon"><i class="fa-brands fa-linkedin"></i></div>
             linkedin.com/in/isha-kale-399225349
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
           </a>
           <a href="https://github.com/ishakale07" class="clink" target="_blank" rel="noopener">
             <div class="clink-icon"><i class="fa-brands fa-github"></i></div>
             github.com/ishakale07
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
           </a>
         </div>
       </div>
@@ -583,6 +646,28 @@ footer span{color:var(--accent);font-weight:600}
 
         document.body.appendChild(overlay);
     });
+    //copy email to clipboard
+   const emailLink = document.getElementById("copyEmail");
+const copyIcon = emailLink.querySelector(".copy-icon");
+
+emailLink.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const email = "ishakale07@gmail.com";
+
+  navigator.clipboard.writeText(email).then(() => {
+
+    // change ONLY copy icon
+    copyIcon.classList.remove("fa-copy", "fa-regular");
+    copyIcon.classList.add("fa-check", "fa-solid");
+
+    setTimeout(() => {
+      copyIcon.classList.remove("fa-check", "fa-solid");
+      copyIcon.classList.add("fa-copy", "fa-regular");
+    }, 2000);
+
+  });
+});
   });
 </script>
 
