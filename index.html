@@ -58,6 +58,167 @@ body{background:#fafafa;color:var(--text);font-family:'Instrument Sans',sans-ser
   to{background-position:350% 50%,350% 50%}
 }
 
+/* ── DARK MODE AURORA ── */
+body.dark {
+  background: #09090b;
+  color: #f4f4f5;
+}
+
+/* Override CSS variables for dark mode */
+body.dark {
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --border: rgba(255,255,255,0.08);
+}
+
+/* Dark aurora uses black gradient + no invert */
+body.dark .aurora-root {
+  background: #09090b;
+}
+
+body.dark .aurora-layer {
+  background-image:
+    repeating-linear-gradient(100deg,
+      #000 0%, #000 7%,
+      transparent 10%, transparent 12%,
+      #000 16%
+    ),
+    repeating-linear-gradient(100deg,
+      var(--blue-500) 10%,
+      var(--indigo-300) 15%,
+      var(--blue-300) 20%,
+      var(--violet-200) 25%,
+      var(--blue-400) 30%
+    );
+  /* Remove the invert — dark mode aurora shows colors directly */
+  filter: blur(10px);
+}
+
+body.dark .aurora-layer::after {
+  background-image:
+    repeating-linear-gradient(100deg,
+      #000 0%, #000 7%,
+      transparent 10%, transparent 12%,
+      #000 16%
+    ),
+    repeating-linear-gradient(100deg,
+      var(--blue-500) 10%,
+      var(--indigo-300) 15%,
+      var(--blue-300) 20%,
+      var(--violet-200) 25%,
+      var(--blue-400) 30%
+    );
+}
+
+/* Dark mode card/glass surfaces */
+body.dark .glass {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+body.dark .skill-card:hover,
+body.dark .project-card:hover,
+body.dark .cert-card:hover {
+  box-shadow: 0 8px 28px rgba(29,158,117,0.15);
+}
+
+body.dark .section-title,
+body.dark .hero h1,
+body.dark .contact-info h2,
+body.dark .project-body h3,
+body.dark .cert-info h4,
+body.dark .achieve-text h4 {
+  color: #f4f4f5;
+}
+
+body.dark .project-img {
+  background: linear-gradient(135deg, rgba(15,37,64,0.9), rgba(13,31,60,0.9));
+}
+
+body.dark .form-group input,
+body.dark .form-group textarea {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.1);
+  color: #f4f4f5;
+}
+
+body.dark .form-group input::placeholder,
+body.dark .form-group textarea::placeholder {
+  color: #71717a;
+}
+
+body.dark .form-group input:focus,
+body.dark .form-group textarea:focus {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(29,158,117,0.5);
+}
+
+body.dark .btn-ghost {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.15);
+  color: #f4f4f5;
+}
+
+body.dark .btn-ghost:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+body.dark .divider-inner {
+  background: rgba(255,255,255,0.07);
+}
+
+body.dark footer {
+  background: rgba(9,9,11,0.85);
+  border-color: rgba(255,255,255,0.07);
+}
+
+body.dark .clink-icon {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.08);
+}
+
+body.dark nav {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.15);
+}
+
+body.dark .nav-item.active {
+  background: #fff;
+  color: #09090b;
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+  position: fixed;
+  bottom: 1.75rem;
+  right: 1.75rem;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(10,10,15,0.88);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+}
+
+body.dark .theme-toggle {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.2);
+}
+
 /* ── PILL NAV ── */
 nav{
   position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);
@@ -564,6 +725,11 @@ footer span{color:var(--accent);font-weight:600}
   <p><span>Isha Kale</span> · 2025</p>
 </footer>
 
+<!-- Dark Mode Toggle Button -->
+<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+  <i class="fa-regular fa-moon fa-rotate-by" style="color: #ffffff; --fa-rotate-angle: -45deg;"></i>
+</button>
+
 <script>
   // Scroll fade-in animations
   const fadeObs = new IntersectionObserver(entries => {
@@ -584,7 +750,26 @@ footer span{color:var(--accent);font-weight:600}
     });
   }, { threshold: 0.4 });
   sections.forEach(s => navObs.observe(s));
-  //download resume
+
+  // ── DARK MODE TOGGLE ──                        ← NOW AT TOP LEVEL, outside everything
+  const toggle = document.getElementById('theme-toggle');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const moonIcon = `<i class="fa-regular fa-moon fa-rotate-by" style="color: #ffffff; --fa-rotate-angle: -45deg;"></i>`;
+  const sunIcon  = `<i class="fa-regular fa-sun" style="color: #ffffff;"></i>`;
+
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.body.classList.add('dark');
+    toggle.innerHTML = sunIcon;
+  }
+
+  toggle.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark');
+    toggle.innerHTML = isDark ? sunIcon : moonIcon;
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // ── DOWNLOAD RESUME ──
   function downloadResume() {
     const link = document.createElement('a');
     link.href = 'Isha_Kale_Resume.pdf';
@@ -593,76 +778,58 @@ footer span{color:var(--accent);font-weight:600}
     link.click();
     document.body.removeChild(link);
   }
-  //certificate popup
+
+  // ── CERTIFICATE POPUP ──
   document.querySelectorAll('.cert-link').forEach(link => {
     link.addEventListener('click', function(e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        const imgSrc = this.getAttribute('href');
+      const imgSrc = this.getAttribute('href');
 
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = 0;
-        overlay.style.left = 0;
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.background = 'rgba(0,0,0,0.8)';
-        overlay.style.display = 'flex';
-        overlay.style.alignItems = 'center';
-        overlay.style.justifyContent = 'center';
-        overlay.style.zIndex = 1000;
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.background = 'rgba(0,0,0,0.8)';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = 1000;
 
-        const img = document.createElement('img');
-        img.src = imgSrc;
-        img.style.width = 'auto';
-        img.style.height = 'auto';
-        img.style.maxWidth = '95vw';
-        img.style.maxHeight = '95vh';
-        img.style.objectFit = 'contain';
-        img.style.borderRadius = '10px';
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.style.width = 'auto';
+      img.style.height = 'auto';
+      img.style.maxWidth = '95vw';
+      img.style.maxHeight = '95vh';
+      img.style.objectFit = 'contain';
+      img.style.borderRadius = '10px';
 
-        overlay.appendChild(img);
-
-        overlay.addEventListener('click', () => {
-            document.body.removeChild(overlay);
-        });
-
-        document.body.appendChild(overlay);
+      overlay.appendChild(img);
+      overlay.addEventListener('click', () => document.body.removeChild(overlay));
+      document.body.appendChild(overlay);
     });
-  //copy email to clipboard
+  });                                              // ← cert-link forEach closes HERE
+
+  // ── COPY EMAIL TO CLIPBOARD ──                 ← NOW AT TOP LEVEL too
   const emailLink = document.getElementById("copyEmail");
-  const copyIcon = emailLink.querySelector(".copy-icon");
-  //const badge = emailLink.querySelector(".copied-badge");
-  const tooltip = emailLink.querySelector(".tooltip");
+  if (emailLink) {
+    const copyIcon = emailLink.querySelector(".copy-icon");
 
-  emailLink.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const email = "ishakale07@gmail.com";
-
-    navigator.clipboard.writeText(email).then(() => {
-
-      // change icon
-      copyIcon.classList.remove("fa-copy", "fa-regular");
-      copyIcon.classList.add("fa-check", "fa-solid");
-
-      // hide tooltip, show badge
-      //tooltip.style.opacity = "0";
-      //badge.classList.add("show");
-
-      setTimeout(() => {
-        // revert icon
-        copyIcon.classList.remove("fa-check", "fa-solid");
-        copyIcon.classList.add("fa-copy", "fa-regular");
-
-        // hide badge
-        //badge.classList.remove("show");
-      }, 2000);
-
+    emailLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      navigator.clipboard.writeText("ishakale07@gmail.com").then(() => {
+        copyIcon.classList.remove("fa-copy", "fa-regular");
+        copyIcon.classList.add("fa-check", "fa-solid");
+        setTimeout(() => {
+          copyIcon.classList.remove("fa-check", "fa-solid");
+          copyIcon.classList.add("fa-copy", "fa-regular");
+        }, 2000);
+      });
     });
-  });
-  });
+  }
 </script>
-
 </body>
 </html>
