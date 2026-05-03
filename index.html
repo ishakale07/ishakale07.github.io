@@ -339,16 +339,74 @@ img {
 
 
 /* ── CERTIFICATIONS ── */
-.certs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
-.cert-card{background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.15);
-  color: #f4f4f5;border:1px solid rgba(0,0,0,0.07);border-radius:14px;padding:1.2rem 1.4rem;display:flex;gap:1rem;align-items:flex-start;transition:border-color 0.2s,transform 0.2s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.cert-card:hover{border-color:rgba(29,158,117,0.3);transform:translateY(-2px)}
-.cert-icon{width:42px;height:42px;min-width:42px;border-radius:10px;background:linear-gradient(135deg,rgba(29,158,117,0.12),rgba(93,202,165,0.08));display:flex;align-items:center;justify-content:center;font-size:1.15rem}
-.cert-info h4{font-size:0.88rem;font-weight:600;margin-bottom:0.25rem;color:#0d0d12}
-.cert-info p{color:var(--muted);font-size:0.77rem}
-.cert-link {text-decoration: none;color: inherit}
-.cert-link:hover .cert-card {transform: scale(1.03);cursor: pointer}
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.cert-card {
+  background: rgba(255, 255, 255, 0.7);        /* light mode default */
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: border-color 0.2s, transform 0.2s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.cert-card:hover {
+  border-color: rgba(29, 158, 117, 0.3);
+  transform: translateY(-2px);
+}
+
+/* dark mode override */
+body.dark .cert-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.cert-icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(29, 158, 117, 0.12), rgba(93, 202, 165, 0.08));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.cert-info h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #0d0d12;                              /* light mode text */
+}
+
+/* dark mode text override */
+body.dark .cert-info h4 {
+  color: #f4f4f5;
+}
+
+.cert-info p {
+  color: var(--muted);
+  font-size: 0.77rem;
+}
+
+.cert-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cert-link:hover .cert-card {
+  transform: scale(1.03);
+  cursor: pointer;
+}
 
 /* ── ACHIEVEMENTS ── */
 .achieve-list{display:grid;gap:1rem}
